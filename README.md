@@ -5,6 +5,9 @@
 
 # Based on the work of https://github.com/Blacksuan19/init.nvim
 
+This repo is not intended to public usage but if you find here an interesting modification
+from the original one take it.
+
 ## Table of Contents
 
 - [Why?](#why)
