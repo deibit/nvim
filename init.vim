@@ -75,6 +75,7 @@ set foldlevel=0                                         " open all folds by defa
 set inccommand=nosplit                                  " visual feedback while substituting
 set showtabline=2                                       " always show tabline
 set grepprg=rg\ --vimgrep                               " use rg as default grepper
+set shortmess=I                                         " disable intro message
 
 " performance tweaks
 set nocursorline
@@ -261,13 +262,13 @@ autocmd BufEnter * if index(spellable, &ft) < 0 | set nospell | else | set spell
 autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " startify if no passed argument or all buffers are closed
-augroup noargs
-    " startify when there is no open buffer left
-    autocmd BufDelete * if empty(filter(tabpagebuflist(), '!buflisted(v:val)')) | Startify | endif
+" augroup noargs
+"     " startify when there is no open buffer left
+"     autocmd BufDelete * if empty(filter(tabpagebuflist(), '!buflisted(v:val)')) | Startify | endif
 
-    " open startify on start if no argument was passed
-    autocmd VimEnter * if argc() == 0 | Startify | endif
-augroup END
+"     " open startify on start if no argument was passed
+"     autocmd VimEnter * if argc() == 0 | Startify | endif
+" augroup END
 
 " fzf if passed argument is a folder
 augroup folderarg
@@ -275,7 +276,7 @@ augroup folderarg
     autocmd VimEnter * if argc() != 0 && isdirectory(argv()[0]) | execute 'cd' fnameescape(argv()[0])  | endif
 
     " start startify (fallback if fzf is closed)
-    autocmd VimEnter * if argc() != 0 && isdirectory(argv()[0]) | Startify  | endif
+    " autocmd VimEnter * if argc() != 0 && isdirectory(argv()[0]) | Startify  | endif
 
     " start fzf on passed directory
     autocmd VimEnter * if argc() != 0 && isdirectory(argv()[0]) | execute 'Files ' fnameescape(argv()[0]) | endif
@@ -317,9 +318,9 @@ function! RipgrepFzf(query, fullscreen)
 endfunction
 
 " startify file icons
-function! StartifyEntryFormat()
-    return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
-endfunction
+" function! StartifyEntryFormat()
+"     return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
+" endfunction
 
 " check if last inserted char is a backspace (used by coc pmenu)
 function! s:check_back_space() abort
@@ -344,7 +345,7 @@ endfunction
 let mapleader=","
 nnoremap ; :
 nmap \ <leader>q
-map <F6> :Startify <CR>
+" map <F6> :Startify <CR>
 nmap <leader>r :so ~/.config/nvim/init.vim<CR>
 nmap <leader>q :bd<CR>
 nmap <leader>w :w<CR>
