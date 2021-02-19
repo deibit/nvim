@@ -13,10 +13,12 @@ call plug#begin(expand('~/.config/nvim/plugged'))
 
 " ================= looks and GUI stuff ================== "{{{
 
+Plug 'ycm-core/YouCompleteMe'
 Plug 'vim-airline/vim-airline'                          " airline status bar
 Plug 'ryanoasis/vim-devicons'                           " pretty icons everywhere
 Plug 'luochen1990/rainbow'                              " rainbow parenthesis
 Plug 'hzchirs/vim-material'                             " material color themes
+Plug 'morhetz/gruvbox'
 Plug 'gregsexton/MatchTag'                              " highlight matching html tags
 
 "}}}
@@ -29,15 +31,12 @@ Plug 'junegunn/fzf.vim'                                 " fuzzy search integrati
 Plug 'SirVer/ultisnips'                                 " snippets manager
 Plug 'honza/vim-snippets'                               " actual snippets
 Plug 'Yggdroot/indentLine'                              " show indentation lines
-Plug 'tpope/vim-liquid'                                 " liquid language support
 Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}  " better python
 Plug 'tpope/vim-commentary'                             " better commenting
-" Plug 'mhinz/vim-startify'                               " cool start up screen
 Plug 'tpope/vim-fugitive'                               " git support
 Plug 'psliwka/vim-smoothie'                             " some very smooth ass scrolling
 Plug 'wellle/tmux-complete.vim'                         " complete words from a tmux panes
 Plug 'tpope/vim-eunuch'                                 " run common Unix commands inside Vim
-Plug 'dart-lang/dart-vim-plugin'
 Plug 'machakann/vim-sandwich'                           " make sandwiches
 Plug 'christoomey/vim-tmux-navigator'                   " seamless vim and tmux navigation
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
@@ -58,7 +57,6 @@ set fillchars+=vert:\▏                                  " requires a patched n
 set wrap breakindent                                    " wrap long lines to the width set by tw
 set encoding=utf-8                                      " text encoding
 set number                                              " enable numbers on the left
-set relativenumber                                      " current line is 0
 set title                                               " tab title as file name
 set noshowmode                                          " dont show current mode below statusline
 set noshowcmd                                           " to get rid of display of last command
@@ -97,7 +95,7 @@ set signcolumn=yes
 
 " Themeing
 let g:material_style = 'dark'
-colorscheme vim-material
+colorscheme gruvbox
 hi Pmenu guibg='#00010a' guifg=white                    " popup menu colors
 hi Comment gui=italic cterm=italic                      " italic comments
 hi Search guibg=#b16286 guifg=#ebdbb2 gui=NONE          " search string highlight color
@@ -111,15 +109,12 @@ hi DiffAdd  guibg=#0f111a guifg=#43a047
 hi DiffChange guibg=#0f111a guifg=#fdd835
 hi DiffRemoved guibg=#0f111a guifg=#e53935
 
-" coc multi cursor highlight color
-hi CocCursorRange guibg=#b16286 guifg=#ebdbb2
-
 "}}}
 
 " ======================== Plugin Configurations ======================== "{{{
 
 "" built in plugins
-let loaded_netrw = 0                                    " diable netew
+let loaded_netrw = 0                                    " disable netew
 let g:omni_sql_no_default_maps = 1                      " disable sql omni completion
 let g:loaded_python_provider = 0
 let g:loaded_perl_provider = 0
@@ -127,6 +122,9 @@ let g:loaded_ruby_provider = 0
 let g:python3_host_prog = expand('/usr/bin/python3')
 
 " Airline
+let g:airline_powerline_fonts = 1
+let g:webdevicons_enable_airline_statusline = 1
+let g:webdevicons_enable_airline_tabline = 1
 let g:airline_theme='material'
 let g:airline_skip_empty_sections = 1
 let g:airline_section_warning = ''
@@ -136,8 +134,6 @@ let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_min_count = 2   " show tabline only if there is more than 1 buffer
 let g:airline#extensions#tabline#fnamemod = ':t'        " show only file name on tabs
-let airline#extensions#coc#error_symbol = '✘:'
-let airline#extensions#coc#warning_symbol = '⚠:'
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
@@ -145,83 +141,11 @@ let g:airline_symbols.linenr = ''
 let g:airline_symbols.branch = '⎇ '
 let g:airline_symbols.dirty= ''
 
-"" coc
-
-" Navigate snippet placeholders using tab
-let g:coc_snippet_next = '<Tab>'
-let g:coc_snippet_prev = '<S-Tab>'
-
-" list of the extensions to make sure are always installed
-let g:coc_global_extensions = [
-            \'coc-yank',
-            \'coc-pairs',
-            \'coc-json',
-            \'coc-actions',
-            \'coc-css',
-            \'coc-html',
-            \'coc-tsserver',
-            \'coc-yaml',
-            \'coc-lists',
-            \'coc-snippets',
-            \'coc-python',
-            \'coc-clangd',
-            \'coc-prettier',
-            \'coc-xml',
-            \'coc-syntax',
-            \'coc-git',
-            \'coc-marketplace',
-            \'coc-highlight',
-            \'coc-fzf-preview'
-            \]
 
 " indentLine
 let g:indentLine_char_list = ['▏', '¦', '┆', '┊']
 let g:indentLine_setColors = 0
 let g:indentLine_setConceal = 0                         " actually fix the annoying markdown links conversion
-" let g:indentLine_fileTypeExclude = ['startify']
-
-" "" startify
-" let g:startify_padding_left = 10
-" let g:startify_session_persistence = 1
-" let g:startify_enable_special = 0
-" let g:startify_change_to_vcs_root = 1
-" let g:startify_lists = [
-"     \ { 'type': 'dir'       },
-"     \ { 'type': 'files'     },
-"     \ { 'type': 'sessions'  },
-"     \ { 'type': 'bookmarks' },
-"     \ { 'type': 'commands' },
-"     \ ]
-
-" " bookmark examples
-" let  g:startify_bookmarks =  [
-"     \ {'v': '~/.config/nvim'},
-"     \ {'d': '~/.dotfiles' }
-"     \ ]
-
-" " custom commands
-" let g:startify_commands = [
-"     \ {'ch':  ['Health Check', ':checkhealth']},
-"     \ {'ps': ['Plugins status', ':PlugStatus']},
-"     \ {'pu': ['Update vim plugins',':PlugUpdate | PlugUpgrade']},
-"     \ {'uc': ['Update coc Plugins', ':CocUpdate']},
-"     \ {'h':  ['Help', ':help']},
-"     \ ]
-
-" " custom banner
-" let g:startify_custom_header = [
-"  \ '',
-"  \ '                                                    ▟▙            ',
-"  \ '                                                    ▝▘            ',
-"  \ '            ██▃▅▇█▆▖  ▗▟████▙▖   ▄████▄   ██▄  ▄██  ██  ▗▟█▆▄▄▆█▙▖',
-"  \ '            ██▛▔ ▝██  ██▄▄▄▄██  ██▛▔▔▜██  ▝██  ██▘  ██  ██▛▜██▛▜██',
-"  \ '            ██    ██  ██▀▀▀▀▀▘  ██▖  ▗██   ▜█▙▟█▛   ██  ██  ██  ██',
-"  \ '            ██    ██  ▜█▙▄▄▄▟▊  ▀██▙▟██▀   ▝████▘   ██  ██  ██  ██',
-"  \ '            ▀▀    ▀▀   ▝▀▀▀▀▀     ▀▀▀▀       ▀▀     ▀▀  ▀▀  ▀▀  ▀▀',
-"  \ '',
-"  \ '',
-"  \ '',
-"  \]
 
 " rainbow brackets
 let g:rainbow_active = 1
@@ -251,33 +175,15 @@ let $FZF_DEFAULT_COMMAND = "rg --files --hidden --glob '!.git/**' --glob '!build
 au BufEnter * set fo-=c fo-=r fo-=o                     " stop annoying auto commenting on new lines
 au FileType help wincmd L                               " open help in vertical split
 au BufWritePre * :%s/\s\+$//e                           " remove trailing whitespaces before saving
-au CursorHold * silent call CocActionAsync('highlight') " highlight match on cursor hold
 
 " enable spell only if file type is normal text
 let spellable = ['markdown', 'gitcommit', 'txt', 'text', 'liquid', 'rst']
 autocmd BufEnter * if index(spellable, &ft) < 0 | set nospell | else | set spell | endif
 
-
-" coc completion popup
-autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
-
-" startify if no passed argument or all buffers are closed
-" augroup noargs
-"     " startify when there is no open buffer left
-"     autocmd BufDelete * if empty(filter(tabpagebuflist(), '!buflisted(v:val)')) | Startify | endif
-
-"     " open startify on start if no argument was passed
-"     autocmd VimEnter * if argc() == 0 | Startify | endif
-" augroup END
-
 " fzf if passed argument is a folder
 augroup folderarg
     " change working directory to passed directory
     autocmd VimEnter * if argc() != 0 && isdirectory(argv()[0]) | execute 'cd' fnameescape(argv()[0])  | endif
-
-    " start startify (fallback if fzf is closed)
-    " autocmd VimEnter * if argc() != 0 && isdirectory(argv()[0]) | Startify  | endif
-
     " start fzf on passed directory
     autocmd VimEnter * if argc() != 0 && isdirectory(argv()[0]) | execute 'Files ' fnameescape(argv()[0]) | endif
 augroup END
@@ -290,12 +196,6 @@ autocmd BufReadPost *
 
 " python renaming
 autocmd FileType python nnoremap <leader>rn :Semshi rename <CR>
-
-" format with available file format formatter
-command! -nargs=0 Format :call CocAction('format')
-
-" organize imports
-command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
 
 " files in fzf
 command! -bang -nargs=? -complete=dir Files
@@ -316,11 +216,6 @@ function! RipgrepFzf(query, fullscreen)
     let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
     call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
-
-" startify file icons
-" function! StartifyEntryFormat()
-"     return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
-" endfunction
 
 " check if last inserted char is a backspace (used by coc pmenu)
 function! s:check_back_space() abort
@@ -345,7 +240,6 @@ endfunction
 let mapleader=","
 nnoremap ; :
 nmap \ <leader>q
-" map <F6> :Startify <CR>
 nmap <leader>r :so ~/.config/nvim/init.vim<CR>
 nmap <leader>q :bd<CR>
 nmap <leader>w :w<CR>
@@ -405,42 +299,7 @@ nmap <F1> <plug>(fzf-maps-n)
 imap <F1> <plug>(fzf-maps-i)
 vmap <F1> <plug>(fzf-maps-x)
 
-"" coc
-
-" use tab to navigate snippet placeholders
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-" Use enter to accept snippet expansion
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
-
-" multi cursor shortcuts
-nmap <silent> <C-a> <Plug>(coc-cursors-word)
-xmap <silent> <C-a> <Plug>(coc-cursors-range)
-
-" Use `[g` and `]g` to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-" other stuff
-nmap <leader>rn <Plug>(coc-rename)
 nmap <leader>o :OR <CR>
-
-" jump stuff
-nmap <leader>jd <Plug>(coc-definition)
-nmap <leader>jy <Plug>(coc-type-definition)
-nmap <leader>ji <Plug>(coc-implementation)
-nmap <leader>jr <Plug>(coc-references)
-autocmd FileType c,cpp nmap <leader>jh :CocCommand clangd.switchSourceHeader<CR>
-autocmd FileType c,cpp nmap <leader>js :CocCommand clangd.symbolInfo<CR>
-
-" other coc actions
-xmap <silent> <leader>a :<C-u>execute 'CocCommand actions.open ' . visualmode()<CR>
-nmap <leader>a :CocCommand actions.open<CR>
-nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 " fugitive mappings
 nmap <leader>gd :Gdiffsplit<CR>
