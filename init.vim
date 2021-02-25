@@ -14,6 +14,7 @@ call plug#begin(expand('~/.config/nvim/plugged'))
 " ================= looks and GUI stuff ================== "{{{
 
 Plug 'ycm-core/YouCompleteMe'
+Plug 'fatih/vim-go'
 Plug 'vim-airline/vim-airline'                          " airline status bar
 Plug 'ryanoasis/vim-devicons'                           " pretty icons everywhere
 Plug 'luochen1990/rainbow'                              " rainbow parenthesis
@@ -25,7 +26,6 @@ Plug 'gregsexton/MatchTag'                              " highlight matching htm
 
 " ================= Functionalities ================= "{{{
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}         " LSP and more
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }     " fzf itself
 Plug 'junegunn/fzf.vim'                                 " fuzzy search integration
 Plug 'SirVer/ultisnips'                                 " snippets manager
@@ -223,15 +223,6 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" show docs on things with K
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
 "}}}
 
 " ======================== Custom Mappings ====================== "{{{
@@ -241,13 +232,25 @@ let mapleader=","
 nnoremap ; :
 nmap \ <leader>q
 nmap <leader>r :so ~/.config/nvim/init.vim<CR>
+nmap <leader>R :e ~/.config/nvim/init.vim<CR>
 nmap <leader>q :bd<CR>
 nmap <leader>w :w<CR>
 map <leader>s :Format<CR>
 nmap <Tab> :bnext<CR>
 nmap <S-Tab> :bprevious<CR>
-noremap <leader>e :e $MYVIMRC<CR>
 noremap <C-q> :q<CR>
+" Window splits
+nnoremap <leader>" :vsplit<CR>
+nnoremap <leader>% :split<CR>
+" Move between panes
+nnoremap <c-left> <c-w>h
+nnoremap <c-down> <c-w>j
+nnoremap <c-up> <c-w>k
+nnoremap <c-right> <c-w>l
+" Redo
+nnoremap U <c-r>
+" Close pane
+nnoremap <leader>x <c-w>c
 
 " new line in normal mode and back
 map <Enter> o<ESC>
@@ -263,16 +266,6 @@ nnoremap x "_x
 vnoremap <LeftRelease> "+y<LeftRelease>
 vnoremap <C-c> "+y<CR>
 vnoremap <C-x> "+d<CR>
-
-" switch between splits using ctrl + {h,j,k,l}
-inoremap <C-h> <C-\><C-N><C-w>h
-inoremap <C-j> <C-\><C-N><C-w>j
-inoremap <C-k> <C-\><C-N><C-w>k
-inoremap <C-l> <C-\><C-N><C-w>l
-nnoremap <C-h> <C-w>h
-noremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
 
 " disable hl with 2 esc
 noremap <silent><esc> <esc>:noh<CR><esc>
@@ -293,13 +286,12 @@ nmap <leader>gc :Commits<CR>
 nmap <leader>gs :GFiles?<CR>
 nmap <leader>sh :History/<CR>
 nmap <leader>l :BLines/<CR>
+nmap <leader>m :Maps<CR>
 
 " show mapping on all modes with F1
 nmap <F1> <plug>(fzf-maps-n)
 imap <F1> <plug>(fzf-maps-i)
 vmap <F1> <plug>(fzf-maps-x)
-
-nmap <leader>o :OR <CR>
 
 " fugitive mappings
 nmap <leader>gd :Gdiffsplit<CR>
