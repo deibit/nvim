@@ -217,11 +217,6 @@ function! RipgrepFzf(query, fullscreen)
     call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
 
-" check if last inserted char is a backspace (used by coc pmenu)
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
 
 "}}}
 
@@ -287,6 +282,13 @@ nmap <leader>gs :GFiles?<CR>
 nmap <leader>sh :History/<CR>
 nmap <leader>l :BLines/<CR>
 nmap <leader>m :Maps<CR>
+
+"" Vim-go
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_operators = 1
 
 " show mapping on all modes with F1
 nmap <F1> <plug>(fzf-maps-n)
