@@ -13,7 +13,7 @@ call plug#begin(expand('~/.config/nvim/plugged'))
 
 " ================= looks and GUI stuff ================== "{{{
 
-Plug 'ycm-core/YouCompleteMe'
+Plug 'dense-analysis/ale'
 Plug 'fatih/vim-go'
 Plug 'vim-airline/vim-airline'                          " airline status bar
 Plug 'ryanoasis/vim-devicons'                           " pretty icons everywhere
@@ -34,7 +34,6 @@ Plug 'Yggdroot/indentLine'                              " show indentation lines
 Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}  " better python
 Plug 'tpope/vim-commentary'                             " better commenting
 Plug 'tpope/vim-fugitive'                               " git support
-Plug 'psliwka/vim-smoothie'                             " some very smooth ass scrolling
 Plug 'wellle/tmux-complete.vim'                         " complete words from a tmux panes
 Plug 'tpope/vim-eunuch'                                 " run common Unix commands inside Vim
 Plug 'machakann/vim-sandwich'                           " make sandwiches
@@ -294,6 +293,76 @@ let g:go_highlight_operators = 1
 nmap <F1> <plug>(fzf-maps-n)
 imap <F1> <plug>(fzf-maps-i)
 vmap <F1> <plug>(fzf-maps-x)
+
+" ALE
+"-------------------------------------------------------------------------------
+
+let g:ale_completion_enabled = 1
+set omnifunc=ale#completion#OmniFunc
+
+nnoremap <silent>gd :ALEGoToDefinition<cr>
+nnoremap <silent>gD :ALEGoToDefinitionInVSplit<cr>
+nnoremap <silent>gt :ALEGoToTypeDefinition<cr>
+nnoremap <silent>gT :ALEGoToTypeDefinitionInVSplit<cr>
+nnoremap <silent>gr :ALEFindReferences<cr>
+nnoremap <silent>gn :ALENext<cr>
+nnoremap <silent>gp :ALEPrevious<cr>
+
+let g:ale_sign_error = "◉"
+let g:ale_sign_warning = "◉"
+highlight ALEErrorSign ctermfg=9 ctermbg=15 guifg=#C30500 guibg=NONE
+highlight ALEWarningSign ctermfg=11 ctermbg=15 guifg=#ED6237 guibg=NONE
+
+
+let g:ale_close_preview_on_insert = 1
+let g:ale_set_balloons = 1
+
+" temp
+let g:ale_virtualenv_dir_names = []
+
+" Only run explicit linters
+let g:ale_linters_explicit = 1
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 1
+
+" Fixers
+let g:ale_fixers = {
+\   'javascript': ['eslint'],
+\   'vue': ['eslint'],
+\   'css': ['eslint'],
+\   'html': ['eslint'],
+\   'python': ['autopep8', 'black'],
+\   'rust': ['rustfmt']
+\}
+let g:ale_fix_on_save = 1
+
+" Aliases for Vue
+let g:ale_linter_aliases = {'vue': ['vue', 'javascript']}
+
+" Linters
+let g:ale_linters = {
+\   'javascript': ['eslint', 'tsserver'],
+\   'css': ['eslint'],
+\   'html': ['eslint'],
+\   'python': ['pylint', 'pyls'],
+\   'vue': ['eslint', 'vls'],
+\   'cpp': ['clangd'],
+\   'c': ['clangd'],
+\   'rust': ['cargo', 'rls', 'rustc'],
+\   'go': ['gopls', 'gofmt', 'golint'],
+\   'swift': ['sourcekitlsp']
+\}
+
+let g:ale_sourcekit_lsp_executable = "~/Repos/sourcekit-lsp/.build/x86_64-apple-macosx/debug/sourcekit-lsp"
+
+let g:ale_lint_on_save = 1
+let g:ale_c_clangd_executable = "/usr/local/opt/llvm/bin/clangd"
+let g:ale_pattern_options_enabled = 1
+" Do not lint or fix minified files
+let g:ale_pattern_options = {
+\ '\.min\.js$': {'ale_linters': [], 'ale_fixers': []},
+\ '\.min\.css$': {'ale_linters': [], 'ale_fixers': []},
+\}
 
 " fugitive mappings
 nmap <leader>gd :Gdiffsplit<CR>
