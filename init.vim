@@ -225,8 +225,8 @@ endfunction
 let mapleader=","
 nnoremap ; :
 nmap \ <leader>q
-nmap <leader>r :so ~/.config/nvim/init.vim<CR>
-nmap <leader>R :e ~/.config/nvim/init.vim<CR>
+nmap <leader>E :so ~/.config/nvim/init.vim<CR>
+nmap <leader>e :e ~/.config/nvim/init.vim<CR>
 nmap <leader>q :bd<CR>
 nmap <leader>w :w<CR>
 map <leader>s :Format<CR>
@@ -279,7 +279,8 @@ nmap <leader>/ :Rg<CR>
 nmap <leader>gc :Commits<CR>
 nmap <leader>gs :GFiles?<CR>
 nmap <leader>sh :History/<CR>
-nmap <leader>l :BLines/<CR>
+nmap <leader>l :Lines/<CR>
+nmap <leader>L :BLines/<CR>
 nmap <leader>m :Maps<CR>
 
 "" Vim-go
