@@ -13,9 +13,14 @@ call plug#begin(expand('~/.config/nvim/plugged'))
 
 " ================= looks and GUI stuff ================== "{{{
 
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'glepnir/galaxyline.nvim' , {'branch': 'main'}
+
 Plug 'dense-analysis/ale'
 Plug 'fatih/vim-go'
-Plug 'vim-airline/vim-airline'                          " airline status bar
+" Plug 'vim-airline/vim-airline'                          " airline status bar
 Plug 'ryanoasis/vim-devicons'                           " pretty icons everywhere
 Plug 'luochen1990/rainbow'                              " rainbow parenthesis
 Plug 'hzchirs/vim-material'                             " material color themes
@@ -120,25 +125,25 @@ let g:loaded_perl_provider = 0
 let g:loaded_ruby_provider = 0
 let g:python3_host_prog = expand('/usr/bin/python3')
 
-" Airline
-let g:airline_powerline_fonts = 1
-let g:webdevicons_enable_airline_statusline = 1
-let g:webdevicons_enable_airline_tabline = 1
-let g:airline_theme='material'
-let g:airline_skip_empty_sections = 1
-let g:airline_section_warning = ''
-let g:airline_section_x=''
-let g:airline_section_z = airline#section#create(['%3p%% ', 'linenr', ':%c'])
-let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_min_count = 2   " show tabline only if there is more than 1 buffer
-let g:airline#extensions#tabline#fnamemod = ':t'        " show only file name on tabs
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-let g:airline_symbols.linenr = ''
-let g:airline_symbols.branch = '⎇ '
-let g:airline_symbols.dirty= ''
+" " Airline
+" let g:airline_powerline_fonts = 1
+" let g:webdevicons_enable_airline_statusline = 1
+" let g:webdevicons_enable_airline_tabline = 1
+" let g:airline_theme='material'
+" let g:airline_skip_empty_sections = 1
+" let g:airline_section_warning = ''
+" let g:airline_section_x=''
+" let g:airline_section_z = airline#section#create(['%3p%% ', 'linenr', ':%c'])
+" let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+" let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#buffer_min_count = 2   " show tabline only if there is more than 1 buffer
+" let g:airline#extensions#tabline#fnamemod = ':t'        " show only file name on tabs
+" if !exists('g:airline_symbols')
+"   let g:airline_symbols = {}
+" endif
+" let g:airline_symbols.linenr = ''
+" let g:airline_symbols.branch = '⎇ '
+" let g:airline_symbols.dirty= ''
 
 
 " indentLine
@@ -151,9 +156,6 @@ let g:rainbow_active = 1
 
 " tmux navigator
 let g:tmux_navigator_no_mappings = 1
-
-" semshi settings
-let g:semshi#error_sign	= v:false                       " let ms python lsp handle this
 
 "" FZF
 let g:fzf_action = {
@@ -193,8 +195,6 @@ autocmd BufReadPost *
      \   exe "normal! g`\"" |
      \ endif
 
-" python renaming
-autocmd FileType python nnoremap <leader>rn :Semshi rename <CR>
 
 " files in fzf
 command! -bang -nargs=? -complete=dir Files
