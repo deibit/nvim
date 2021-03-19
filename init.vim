@@ -17,26 +17,22 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'glepnir/galaxyline.nvim' , {'branch': 'main'}
-
-Plug 'dense-analysis/ale'
-Plug 'fatih/vim-go'
-" Plug 'vim-airline/vim-airline'                          " airline status bar
-Plug 'ryanoasis/vim-devicons'                           " pretty icons everywhere
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lua/completion-nvim'
+Plug 'kyazdani42/nvim-web-devicons'
 Plug 'luochen1990/rainbow'                              " rainbow parenthesis
 Plug 'hzchirs/vim-material'                             " material color themes
 Plug 'morhetz/gruvbox'
 Plug 'gregsexton/MatchTag'                              " highlight matching html tags
+Plug 'kyazdani42/nvim-tree.lua'
 
 "}}}
 
 " ================= Functionalities ================= "{{{
 
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }     " fzf itself
-Plug 'junegunn/fzf.vim'                                 " fuzzy search integration
 Plug 'SirVer/ultisnips'                                 " snippets manager
 Plug 'honza/vim-snippets'                               " actual snippets
 Plug 'Yggdroot/indentLine'                              " show indentation lines
-Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}  " better python
 Plug 'tpope/vim-commentary'                             " better commenting
 Plug 'tpope/vim-fugitive'                               " git support
 Plug 'wellle/tmux-complete.vim'                         " complete words from a tmux panes
@@ -72,15 +68,16 @@ set emoji                                               " enable emojis
 set history=1000                                        " history limit
 set backspace=indent,eol,start                          " sensible backspacing
 set undofile                                            " enable persistent undo
-set undodir=/tmp                                        " undo temp file directory
+" set undodir=/tmp                                        " undo temp file directory
 set foldlevel=0                                         " open all folds by default
+" set foldmethod=marker
 set inccommand=nosplit                                  " visual feedback while substituting
 set showtabline=2                                       " always show tabline
 set grepprg=rg\ --vimgrep                               " use rg as default grepper
 set shortmess=I                                         " disable intro message
 
 " performance tweaks
-set nocursorline
+set cursorline
 set nocursorcolumn
 set scrolljump=5
 set lazyredraw
@@ -100,18 +97,6 @@ set signcolumn=yes
 " Themeing
 let g:material_style = 'dark'
 colorscheme gruvbox
-hi Pmenu guibg='#00010a' guifg=white                    " popup menu colors
-hi Comment gui=italic cterm=italic                      " italic comments
-hi Search guibg=#b16286 guifg=#ebdbb2 gui=NONE          " search string highlight color
-hi NonText guifg=bg                                     " mask ~ on empty lines
-hi clear CursorLineNr                                   " use the theme color for relative number
-hi CursorLineNr gui=bold                                " make relative number bold
-hi SpellBad guifg=NONE gui=bold,undercurl               " misspelled words
-
-" colors for git (especially the gutter)
-hi DiffAdd  guibg=#0f111a guifg=#43a047
-hi DiffChange guibg=#0f111a guifg=#fdd835
-hi DiffRemoved guibg=#0f111a guifg=#e53935
 
 "}}}
 
@@ -125,27 +110,6 @@ let g:loaded_perl_provider = 0
 let g:loaded_ruby_provider = 0
 let g:python3_host_prog = expand('/usr/bin/python3')
 
-" " Airline
-" let g:airline_powerline_fonts = 1
-" let g:webdevicons_enable_airline_statusline = 1
-" let g:webdevicons_enable_airline_tabline = 1
-" let g:airline_theme='material'
-" let g:airline_skip_empty_sections = 1
-" let g:airline_section_warning = ''
-" let g:airline_section_x=''
-" let g:airline_section_z = airline#section#create(['%3p%% ', 'linenr', ':%c'])
-" let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
-" let g:airline#extensions#tabline#enabled = 1
-" let g:airline#extensions#tabline#buffer_min_count = 2   " show tabline only if there is more than 1 buffer
-" let g:airline#extensions#tabline#fnamemod = ':t'        " show only file name on tabs
-" if !exists('g:airline_symbols')
-"   let g:airline_symbols = {}
-" endif
-" let g:airline_symbols.linenr = ''
-" let g:airline_symbols.branch = '⎇ '
-" let g:airline_symbols.dirty= ''
-
-
 " indentLine
 let g:indentLine_char_list = ['▏', '¦', '┆', '┊']
 let g:indentLine_setColors = 0
@@ -157,17 +121,17 @@ let g:rainbow_active = 1
 " tmux navigator
 let g:tmux_navigator_no_mappings = 1
 
-"" FZF
-let g:fzf_action = {
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-x': 'split',
-  \ 'ctrl-v': 'vsplit' }
+" completion-nvim
+autocmd BufEnter * lua require'completion'.on_attach()
+" Use <Tab> and <S-Tab> to navigate through popup menu
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+set completeopt=menuone,noinsert,noselect
+set shortmess+=c
+" imap <tab> <Plug>(completion_smart_tab)
+" imap <s-tab> <Plug>(completion_smart_s_tab)
+let g:completion_enable_snippet = 'UltiSnips'
 
-let g:fzf_layout = {'up':'~90%', 'window': { 'width': 0.8, 'height': 0.8,'yoffset':0.5,'xoffset': 0.5, 'border': 'sharp' } }
-let g:fzf_tags_command = 'ctags -R'
-
-let $FZF_DEFAULT_OPTS = '--layout=reverse --inline-info'
-let $FZF_DEFAULT_COMMAND = "rg --files --hidden --glob '!.git/**' --glob '!build/**' --glob '!.dart_tool/**' --glob '!.idea'"
 
 "}}}
 
@@ -195,27 +159,8 @@ autocmd BufReadPost *
      \   exe "normal! g`\"" |
      \ endif
 
-
-" files in fzf
-command! -bang -nargs=? -complete=dir Files
-    \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--inline-info']}), <bang>0)
-
 " advanced grep
 command! -nargs=* -bang Rg call RipgrepFzf(<q-args>, <bang>0)
-
-"}}}
-
-" ================== Custom Functions ===================== "{{{
-
-" advanced grep(faster with preview)
-function! RipgrepFzf(query, fullscreen)
-    let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
-    let initial_command = printf(command_fmt, shellescape(a:query))
-    let reload_command = printf(command_fmt, '{q}')
-    let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
-    call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
-endfunction
-
 
 "}}}
 
@@ -267,104 +212,6 @@ noremap <silent><esc> <esc>:noh<CR><esc>
 " trim white spaces
 nnoremap <F2> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 
-" markdown preview
-au FileType markdown nmap <leader>m :MarkdownPreview<CR>
-
-"" FZF
-nnoremap <silent> <leader>f :Files<CR>
-nmap <leader>b :Buffers<CR>
-nmap <leader>c :Commands<CR>
-nmap <leader>t :BTags<CR>
-nmap <leader>/ :Rg<CR>
-nmap <leader>gc :Commits<CR>
-nmap <leader>gs :GFiles?<CR>
-nmap <leader>sh :History/<CR>
-nmap <leader>l :Lines/<CR>
-nmap <leader>L :BLines/<CR>
-nmap <leader>m :Maps<CR>
-
-"" Vim-go
-let g:go_highlight_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_function_calls = 1
-let g:go_highlight_operators = 1
-
-" show mapping on all modes with F1
-nmap <F1> <plug>(fzf-maps-n)
-imap <F1> <plug>(fzf-maps-i)
-vmap <F1> <plug>(fzf-maps-x)
-
-" ALE
-"-------------------------------------------------------------------------------
-
-let g:ale_completion_enabled = 1
-set omnifunc=ale#completion#OmniFunc
-
-nnoremap <silent>gd :ALEGoToDefinition<cr>
-nnoremap <silent>gD :ALEGoToDefinitionInVSplit<cr>
-nnoremap <silent>gt :ALEGoToTypeDefinition<cr>
-nnoremap <silent>gT :ALEGoToTypeDefinitionInVSplit<cr>
-nnoremap <silent>gr :ALEFindReferences<cr>
-nnoremap <silent>gn :ALENext<cr>
-nnoremap <silent>gp :ALEPrevious<cr>
-
-let g:ale_sign_error = "◉"
-let g:ale_sign_warning = "◉"
-highlight ALEErrorSign ctermfg=9 ctermbg=15 guifg=#C30500 guibg=NONE
-highlight ALEWarningSign ctermfg=11 ctermbg=15 guifg=#ED6237 guibg=NONE
-
-
-let g:ale_close_preview_on_insert = 1
-let g:ale_set_balloons = 1
-
-" temp
-let g:ale_virtualenv_dir_names = []
-
-" Only run explicit linters
-let g:ale_linters_explicit = 1
-let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 1
-
-" Fixers
-let g:ale_fixers = {
-\   'javascript': ['eslint'],
-\   'vue': ['eslint'],
-\   'css': ['eslint'],
-\   'html': ['eslint'],
-\   'python': ['autopep8', 'black'],
-\   'rust': ['rustfmt']
-\}
-let g:ale_fix_on_save = 1
-
-" Aliases for Vue
-let g:ale_linter_aliases = {'vue': ['vue', 'javascript']}
-
-" Linters
-let g:ale_linters = {
-\   'javascript': ['eslint', 'tsserver'],
-\   'css': ['eslint'],
-\   'html': ['eslint'],
-\   'python': ['pylint', 'pyls'],
-\   'vue': ['eslint', 'vls'],
-\   'cpp': ['clangd'],
-\   'c': ['clangd'],
-\   'rust': ['cargo', 'rls', 'rustc'],
-\   'go': ['gopls', 'gofmt', 'golint'],
-\   'swift': ['sourcekitlsp']
-\}
-
-let g:ale_sourcekit_lsp_executable = "~/Repos/sourcekit-lsp/.build/x86_64-apple-macosx/debug/sourcekit-lsp"
-
-let g:ale_lint_on_save = 1
-let g:ale_c_clangd_executable = "/usr/local/opt/llvm/bin/clangd"
-let g:ale_pattern_options_enabled = 1
-" Do not lint or fix minified files
-let g:ale_pattern_options = {
-\ '\.min\.js$': {'ale_linters': [], 'ale_fixers': []},
-\ '\.min\.css$': {'ale_linters': [], 'ale_fixers': []},
-\}
-
 " fugitive mappings
 nmap <leader>gd :Gdiffsplit<CR>
 nmap <leader>gb :Gblame<CR>
@@ -374,4 +221,36 @@ nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
 nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
 nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
 
+" Telescope
+nnoremap <leader>f <cmd>Telescope find_files<cr>
+nnoremap <leader>F <cmd>Telescope file_browser<cr>
+nnoremap <leader>ff <cmd>Telescope fd<cr>
+nnoremap <leader>m <cmd>Telescope keymaps<cr>
+nnoremap <leader>M <cmd>Telescope marks<cr>
+nnoremap <leader>c <cmd>Telescope commands<cr>
+nnoremap <leader>b <cmd>Telescope buffers<cr>
+nnoremap <leader>l <cmd>Telescope live_grep<cr>
+nnoremap <leader>h <cmd>Telescope help_tags<cr>
+
+" nvimlsp
+nnoremap <silent><leader>K <cmd>lua vim.lsp.buf.hover()<cr>
+nnoremap <silent><leader>d <cmd>lua vim.lsp.buf.type_definition()<cr>
+nnoremap <silent>gd <cmd>lua vim.lsp.buf.definition()<cr>
+nnoremap <silent>gD <cmd>lua vim.lsp.buf.declaration()<cr>
+nnoremap <silent>gr <cmd>lua vim.lsp.buf.references()<cr>
+nnoremap <silent>gi <cmd>lua vim.lsp.buf.implementation()<cr>
+
+" nvim-tree
+nnoremap <leader>t :NvimTreeToggle<CR>
+
 "}}}
+
+lua << EOF
+require'lspconfig'.clangd.setup{}
+require'lspconfig'.gopls.setup{}
+require("galaxylineconfig")
+EOF
+
+
+
+
