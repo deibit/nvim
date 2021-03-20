@@ -25,14 +25,14 @@ Plug 'hzchirs/vim-material'                             " material color themes
 Plug 'morhetz/gruvbox'
 Plug 'gregsexton/MatchTag'                              " highlight matching html tags
 Plug 'kyazdani42/nvim-tree.lua'
-
+Plug 'deibit/atlas.vim'
 "}}}
 
 " ================= Functionalities ================= "{{{
 
 Plug 'SirVer/ultisnips'                                 " snippets manager
 Plug 'honza/vim-snippets'                               " actual snippets
-Plug 'Yggdroot/indentLine'                              " show indentation lines
+" Plug 'Yggdroot/indentLine'                              " show indentation lines
 Plug 'tpope/vim-commentary'                             " better commenting
 Plug 'tpope/vim-fugitive'                               " git support
 Plug 'wellle/tmux-complete.vim'                         " complete words from a tmux panes
@@ -60,6 +60,7 @@ set number                                              " enable numbers on the 
 set title                                               " tab title as file name
 set noshowmode                                          " dont show current mode below statusline
 set noshowcmd                                           " to get rid of display of last command
+set cmdheight=2
 set conceallevel=2                                      " set this so we wont break indentation plugin
 set splitright                                          " open vertical split to the right
 set splitbelow                                          " open horizontal split to the bottom
@@ -85,18 +86,17 @@ set redrawtime=10000
 set synmaxcol=180
 set re=1
 
-" required by coc
 set hidden
 set nobackup
 set nowritebackup
-set cmdheight=1
 set updatetime=300
 set shortmess+=c
 set signcolumn=yes
 
-" Themeing
+" Theme
 let g:material_style = 'dark'
-colorscheme gruvbox
+let g:atlas_bold=1
+colorscheme atlas
 
 "}}}
 
@@ -168,8 +168,8 @@ command! -nargs=* -bang Rg call RipgrepFzf(<q-args>, <bang>0)
 
 "" the essentials
 let mapleader=","
-nnoremap ; :
 nmap \ <leader>q
+nnoremap <space> /
 nmap <leader>E :so ~/.config/nvim/init.vim<CR>
 nmap <leader>e :e ~/.config/nvim/init.vim<CR>
 nmap <leader>q :bd<CR>
@@ -214,7 +214,7 @@ nnoremap <F2> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 
 " fugitive mappings
 nmap <leader>gd :Gdiffsplit<CR>
-nmap <leader>gb :Gblame<CR>
+nmap <leader>gb :Git blame<CR>
 
 " tmux navigator
 nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
@@ -222,15 +222,17 @@ nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
 nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
 
 " Telescope
-nnoremap <leader>f <cmd>Telescope find_files<cr>
 nnoremap <leader>F <cmd>Telescope file_browser<cr>
-nnoremap <leader>ff <cmd>Telescope fd<cr>
-nnoremap <leader>m <cmd>Telescope keymaps<cr>
 nnoremap <leader>M <cmd>Telescope marks<cr>
-nnoremap <leader>c <cmd>Telescope commands<cr>
 nnoremap <leader>b <cmd>Telescope buffers<cr>
-nnoremap <leader>l <cmd>Telescope live_grep<cr>
+nnoremap <leader>c <cmd>Telescope commands<cr>
+nnoremap <leader>f <cmd>Telescope find_files<cr>
+nnoremap <leader>ff <cmd>Telescope fd<cr>
 nnoremap <leader>h <cmd>Telescope help_tags<cr>
+nnoremap <leader>k <cmd>Telescope man_pages<cr>
+nnoremap <leader>l <cmd>Telescope live_grep<cr>
+nnoremap <leader>L <cmd>Telescope current_buffer_fuzzy_find<cr>
+nnoremap <leader>m <cmd>Telescope keymaps<cr>
 
 " nvimlsp
 nnoremap <silent><leader>K <cmd>lua vim.lsp.buf.hover()<cr>
@@ -239,6 +241,7 @@ nnoremap <silent>gd <cmd>lua vim.lsp.buf.definition()<cr>
 nnoremap <silent>gD <cmd>lua vim.lsp.buf.declaration()<cr>
 nnoremap <silent>gr <cmd>lua vim.lsp.buf.references()<cr>
 nnoremap <silent>gi <cmd>lua vim.lsp.buf.implementation()<cr>
+nnoremap <silent>gx <cmd>lua vim.lsp.buf.lsp_workspace_diagnostics()<cr>
 
 " nvim-tree
 nnoremap <leader>t :NvimTreeToggle<CR>
