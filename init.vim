@@ -13,12 +13,17 @@ call plug#begin(expand('~/.config/nvim/plugged'))
 
 " ================= looks and GUI stuff ================== "{{{
 
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'glepnir/galaxyline.nvim' , {'branch': 'main'}
 Plug 'neovim/nvim-lspconfig'
+
 Plug 'nvim-lua/completion-nvim'
+Plug 'steelsojka/completion-buffers'
+
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'luochen1990/rainbow'                              " rainbow parenthesis
 Plug 'hzchirs/vim-material'                             " material color themes
@@ -30,8 +35,6 @@ Plug 'deibit/atlas.vim'
 
 " ================= Functionalities ================= "{{{
 
-Plug 'SirVer/ultisnips'                                 " snippets manager
-Plug 'honza/vim-snippets'                               " actual snippets
 " Plug 'Yggdroot/indentLine'                              " show indentation lines
 Plug 'tpope/vim-commentary'                             " better commenting
 Plug 'tpope/vim-fugitive'                               " git support
@@ -110,6 +113,9 @@ let g:loaded_perl_provider = 0
 let g:loaded_ruby_provider = 0
 let g:python3_host_prog = expand('/usr/bin/python3')
 
+" Vim-go
+let g:go_code_completion_enabled = 0
+
 " indentLine
 let g:indentLine_char_list = ['▏', '¦', '┆', '┊']
 let g:indentLine_setColors = 0
@@ -128,9 +134,11 @@ inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 set completeopt=menuone,noinsert,noselect
 set shortmess+=c
-" imap <tab> <Plug>(completion_smart_tab)
-" imap <s-tab> <Plug>(completion_smart_s_tab)
-let g:completion_enable_snippet = 'UltiSnips'
+imap <tab> <Plug>(completion_smart_tab)
+imap <s-tab> <Plug>(completion_smart_s_tab)
+let g:completion_chain_complete_list = [
+    \{'complete_items': ['lsp', 'buffers', 'path']},
+\]
 
 
 "}}}
@@ -225,7 +233,7 @@ nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
 nnoremap <leader>F <cmd>Telescope file_browser<cr>
 nnoremap <leader>M <cmd>Telescope marks<cr>
 nnoremap <leader>b <cmd>Telescope buffers<cr>
-nnoremap <leader>C <cmd>Telescope commands<cr>
+nnoremap <leader>c <cmd>Telescope commands<cr>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fd <cmd>Telescope fd<cr>
 nnoremap <leader>h <cmd>Telescope help_tags<cr>
@@ -233,8 +241,8 @@ nnoremap <leader>k <cmd>Telescope man_pages<cr>
 nnoremap <leader>l <cmd>Telescope live_grep<cr>
 nnoremap <leader>L <cmd>Telescope current_buffer_fuzzy_find<cr>
 nnoremap <leader>m <cmd>Telescope keymaps<cr>
-nnoremap <leader>cc <cmd>Telescope git_commits<cr>
-nnoremap <leader>cb <cmd>Telescope git_bcommits<cr>
+nnoremap <leader>gc <cmd>Telescope git_commits<cr>
+nnoremap <leader>gb <cmd>Telescope git_bcommits<cr>
 
 " nvimlsp
 nnoremap <silent><leader>K <cmd>lua vim.lsp.buf.hover()<cr>
