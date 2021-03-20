@@ -225,14 +225,16 @@ nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
 nnoremap <leader>F <cmd>Telescope file_browser<cr>
 nnoremap <leader>M <cmd>Telescope marks<cr>
 nnoremap <leader>b <cmd>Telescope buffers<cr>
-nnoremap <leader>c <cmd>Telescope commands<cr>
-nnoremap <leader>f <cmd>Telescope find_files<cr>
-nnoremap <leader>ff <cmd>Telescope fd<cr>
+nnoremap <leader>C <cmd>Telescope commands<cr>
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fd <cmd>Telescope fd<cr>
 nnoremap <leader>h <cmd>Telescope help_tags<cr>
 nnoremap <leader>k <cmd>Telescope man_pages<cr>
 nnoremap <leader>l <cmd>Telescope live_grep<cr>
 nnoremap <leader>L <cmd>Telescope current_buffer_fuzzy_find<cr>
 nnoremap <leader>m <cmd>Telescope keymaps<cr>
+nnoremap <leader>cc <cmd>Telescope git_commits<cr>
+nnoremap <leader>cb <cmd>Telescope git_bcommits<cr>
 
 " nvimlsp
 nnoremap <silent><leader>K <cmd>lua vim.lsp.buf.hover()<cr>
