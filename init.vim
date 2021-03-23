@@ -20,6 +20,8 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'glepnir/galaxyline.nvim' , {'branch': 'main'}
 Plug 'neovim/nvim-lspconfig'
+Plug 'lewis6991/gitsigns.nvim'
+Plug 'onsails/lspkind-nvim'
 
 Plug 'nvim-lua/completion-nvim'
 Plug 'steelsojka/completion-buffers'
@@ -99,7 +101,7 @@ set signcolumn=yes
 " Theme
 let g:material_style = 'dark'
 let g:atlas_bold=1
-colorscheme atlas
+colorscheme gruvbox
 
 "}}}
 
@@ -123,6 +125,9 @@ let g:indentLine_setConceal = 0                         " actually fix the annoy
 
 " rainbow brackets
 let g:rainbow_active = 1
+let g:rainbow_conf = {
+\ 'guifgs': ['yellow', 'red', 'lightcyan', 'lightmagenta']
+\ }
 
 " tmux navigator
 let g:tmux_navigator_no_mappings = 1
@@ -137,8 +142,11 @@ set shortmess+=c
 imap <tab> <Plug>(completion_smart_tab)
 imap <s-tab> <Plug>(completion_smart_s_tab)
 let g:completion_chain_complete_list = [
-    \{'complete_items': ['lsp', 'buffers', 'path']},
+    \{'complete_items': ['lsp']},
+    \{'complete_items': ['buffers']},
+    \{'complete_items': ['path']},
 \]
+let g:completion_auto_change_source = 1
 
 
 "}}}
@@ -204,10 +212,10 @@ map <Enter> o<ESC>
 map <S-Enter> O<ESC>
 
 " use a different register for delete and paste
-nnoremap d "_d
-vnoremap d "_d
-vnoremap p "_dP
-nnoremap x "_x
+" nnoremap d "_d
+" vnoremap d "_d
+" vnoremap p "_dP
+" nnoremap x "_x
 
 " emulate windows copy, cut behavior
 vnoremap <LeftRelease> "+y<LeftRelease>
@@ -261,6 +269,9 @@ nnoremap <leader>t :NvimTreeToggle<CR>
 lua << EOF
 require'lspconfig'.clangd.setup{}
 require'lspconfig'.gopls.setup{}
+require'lspconfig'.pyright.setup{}
+require('gitsigns').setup()
+require'lspkind'.init()
 require("galaxylineconfig")
 EOF
 
