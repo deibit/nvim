@@ -29,7 +29,7 @@ Plug 'steelsojka/completion-buffers'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'luochen1990/rainbow'                              " rainbow parenthesis
 Plug 'hzchirs/vim-material'                             " material color themes
-Plug 'morhetz/gruvbox'
+Plug 'gruvbox-community/gruvbox'
 Plug 'gregsexton/MatchTag'                              " highlight matching html tags
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'deibit/atlas.vim'
@@ -37,10 +37,10 @@ Plug 'deibit/atlas.vim'
 
 " ================= Functionalities ================= "{{{
 
-" Plug 'Yggdroot/indentLine'                              " show indentation lines
+Plug 'Yggdroot/indentLine'                              " show indentation lines
 Plug 'tpope/vim-commentary'                             " better commenting
 Plug 'tpope/vim-fugitive'                               " git support
-Plug 'wellle/tmux-complete.vim'                         " complete words from a tmux panes
+" Plug 'wellle/tmux-complete.vim'                         " complete words from a tmux panes
 Plug 'tpope/vim-eunuch'                                 " run common Unix commands inside Vim
 Plug 'machakann/vim-sandwich'                           " make sandwiches
 Plug 'christoomey/vim-tmux-navigator'                   " seamless vim and tmux navigation
@@ -147,6 +147,7 @@ let g:completion_chain_complete_list = [
     \{'complete_items': ['path']},
 \]
 let g:completion_auto_change_source = 1
+    " \{'complete_items': ['tmux']},
 
 
 "}}}
@@ -206,6 +207,10 @@ nnoremap <c-right> <c-w>l
 nnoremap U <c-r>
 " Close pane
 nnoremap <leader>x <c-w>c
+" Fast go to normal mode
+imap jk <esc>
+
+
 
 " new line in normal mode and back
 map <Enter> o<ESC>
@@ -274,7 +279,3 @@ require('gitsigns').setup()
 require'lspkind'.init()
 require("galaxylineconfig")
 EOF
-
-
-
-
